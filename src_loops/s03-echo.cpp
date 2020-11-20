@@ -3,7 +3,7 @@
 
 auto main(int argc, char* argv[]) -> int
 {
-    if (argc == 0) {
+    if (argc == 1) {
         return 1;
     }
 
