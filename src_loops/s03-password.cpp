@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
 
-auto main() -> int
+auto main(int argc, char* argv[]) -> int
 {
-    std::string haslo;
+    auto haslo = std::string{};
+    if (argc == 2) haslo = std::string{argv[1]};
+
     while (haslo != "student") {
         std::cout << "password: ";
         getline(std::cin, haslo);

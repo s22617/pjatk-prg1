@@ -97,10 +97,9 @@ auto evaluate_sqrt(std::stack<double>& stack) -> void
     stack.push(sqrt(a));
 }
 
-int factorial(int x)
+auto factorial(int const x) -> int
 {
-    if (x == 0) return 1;
-    else return x*factorial(x-1);
+    return (x == 0) ? 1 : (x * factorial(x - 1));
 }
 
 auto evaluate_factorial(std::stack<double>& stack) -> void
