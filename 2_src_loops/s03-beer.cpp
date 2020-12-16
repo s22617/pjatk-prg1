@@ -9,7 +9,7 @@ auto main(int argc, char* argv[]) -> int
         std::cout << i << " bottles of beer on the wall, " << i
                   << " bottles of beer." << std::endl;
         i--;
-        std::cout << "Take one down, pass it around, ";
+        std::cout << "Take one down, pass it around, " << i << " bottles of beer." << std::endl;
     } while (i > 0);
     std::cout << "No more bottles of beer on the wall, no more bottles of beer."
               << std::endl;
