@@ -7,7 +7,7 @@
 
 auto print_line(itp::channel<std::string>& ch, int const ID) -> void
 {
-    std::string line = ch.wait();
+    auto line = ch.wait();
 
     while (not line.empty()) {
         std::cout << "Thread " + std::to_string(ID) + " reads: " + line

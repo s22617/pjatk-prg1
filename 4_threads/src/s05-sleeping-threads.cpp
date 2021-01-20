@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -16,15 +14,12 @@ auto print_line(std::queue<std::string>& q, std::mutex& q_mtx, int const ID)
         std::random_device rd;
         std::uniform_int_distribution<int> d100(10, 100);
         while (q.empty()) {
-            // std::cout << "THREAD SLEEPING";
-            sleep(d100(rd) / 1000);
+            std::this_thread::sleep_for(std::chrono::milliseconds{d100(rd)});
         }
         {
-            // std::cout << "THREAD MUTEX LOCKED" << std::endl;
             std::lock_guard<std::mutex> lck{q_mtx};
             auto line = q.front();
             q.pop();
-            // std::cout << "Before line.empty()" << std::endl;
             if (line.empty()) {
                 std::cout << "Thread " + std::to_string(ID) + " exiting\n";
                 break;

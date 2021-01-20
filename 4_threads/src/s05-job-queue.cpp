@@ -10,12 +10,13 @@ auto print_line(std::string ID, std::queue<int>& q, std::mutex& q_mtx) -> void
 {
     while (true) {
         {
-            std::lock_guard<std::mutex> lck{q_mtx};
+            std::unique_lock<std::mutex> lck{q_mtx};
             if (q.empty()) {
                 break;
             }
             auto number = q.front();
             q.pop();
+            // lck.unlock();
             std::cout << "from thread " + ID;
             std::cout << " : " + std::to_string(number);
             std::cout << "\n";

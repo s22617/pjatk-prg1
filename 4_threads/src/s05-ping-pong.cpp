@@ -19,23 +19,24 @@ auto print(std::queue<int>& q,
     std::uniform_int_distribution<int> d42(1, 42);
 
     while (true) {
-        if (array[0] != call) {
-            std::unique_lock<std::mutex> lck{mtx};
-            cv.wait(lck);
-        } else {
+        std::unique_lock<std::mutex> lck{mtx};
+        cv.wait(lck);
+        if (array[0] == call) {
             auto number = q.front();
-            if (number > 1024) {
-                std::swap(array[0], array[1]);
-                cv.notify_one();
-                break;
-            }
             q.pop();
 
             std::cout << call << " " << number << std::endl;
             number += d42(rd);
             q.push(number);
-            std::swap(array[0], array[1]);
 
+            std::swap(array[0], array[1]);
+            cv.notify_one();
+
+            if (number > 1024) {
+                break;
+            }
+        } else {
+            lck.unlock();
             cv.notify_one();
         }
     }
@@ -63,6 +64,7 @@ auto main() -> int
                             std::ref(cv),
                             std::ref(array),
                             "Pong"};
+
 
     ping.join();
     pong.join();

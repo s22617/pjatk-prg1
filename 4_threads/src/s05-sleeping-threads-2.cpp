@@ -18,7 +18,7 @@ auto print_line(std::queue<std::string>& q,
 
         auto line = q.front();
         q.pop();
-
+        lck.unlock();
         if (line.empty()) {
             std::cout << "Thread " + std::to_string(ID) + ": exiting\n";
             break;
