@@ -16,10 +16,8 @@ auto print_line(std::string ID, std::queue<int>& q, std::mutex& q_mtx) -> void
             }
             auto number = q.front();
             q.pop();
-            // lck.unlock();
-            std::cout << "from thread " + ID;
-            std::cout << " : " + std::to_string(number);
-            std::cout << "\n";
+            lck.unlock();
+            std::cout << "from thread " + ID + " : " + std::to_string(number) + "\n";
         }
     }
 }

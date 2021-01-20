@@ -20,7 +20,6 @@ auto print(std::queue<int>& q,
 
     while (true) {
         std::unique_lock<std::mutex> lck{mtx};
-        cv.wait(lck);
         if (array[0] == call) {
             auto number = q.front();
             q.pop();
@@ -36,8 +35,8 @@ auto print(std::queue<int>& q,
                 break;
             }
         } else {
-            lck.unlock();
             cv.notify_one();
+            cv.wait(lck);
         }
     }
 }
