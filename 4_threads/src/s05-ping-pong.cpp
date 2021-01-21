@@ -17,27 +17,30 @@ auto print(std::queue<int>& q,
 {
     std::random_device rd;
     std::uniform_int_distribution<int> d42(1, 42);
+    auto number = 0;
 
     while (true) {
-        std::unique_lock<std::mutex> lck{mtx};
-        if (array[0] == call) {
-            auto number = q.front();
+        {
+            std::unique_lock<std::mutex> lck{mtx};
+            
+            if (array[0] != call)
+            {
+                cv.wait(lck);
+                continue;
+            }
+
+            number = q.front();
             q.pop();
 
+            std::swap(array[0], array[1]);
             std::cout << call << " " << number << std::endl;
+
             number += d42(rd);
             q.push(number);
-
-            std::swap(array[0], array[1]);
-            cv.notify_one();
-
-            if (number > 1024) {
-                break;
-            }
-        } else {
-            cv.notify_one();
-            cv.wait(lck);
         }
+        cv.notify_one();
+
+        if (number > 1024) break;
     }
 }
 
