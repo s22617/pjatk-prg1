@@ -11,7 +11,7 @@ struct Student {
     int curr_term;
     double avg_grade;
 
-    Student(std::string n, std::string sur_n, int i, int cur_t, double avg)
+    inline Student(std::string n, std::string sur_n, int i, int cur_t, double avg)
             : name{n}
             , surname{sur_n}
             , index{i}
