@@ -2,6 +2,55 @@
 
 #include <iostream>
 
+auto Time::operator+(Time const& time) const -> Time
+    {
+        Time new_time =
+            Time(hour + time.hour, minute + time.minute, second + time.second);
+        new_time.check_time();
+
+        return new_time;
+    }
+auto Time::operator-(Time const& time) const -> Time
+    {
+        Time new_time = Time(abs(hour - time.hour),
+                             abs(minute - time.minute),
+                             abs(second - time.second));
+
+        return new_time;
+    }
+auto Time::operator<(Time const& time) const -> bool
+    {
+        return hour < time.hour
+                   ? true
+                   : (hour == time.hour && minute < time.minute
+                          ? true
+                          : (hour == time.hour && minute == time.minute
+                                     && second < time.second
+                                 ? true
+                                 : false));
+    }
+auto Time::operator>(Time const& time) const -> bool
+    {
+        return hour > time.hour
+                   ? true
+                   : (hour == time.hour && minute > time.minute
+                          ? true
+                          : (hour == time.hour && minute == time.minute
+                                     && second > time.second
+                                 ? true
+                                 : false));
+    }
+auto Time::operator==(Time const& time) const -> bool
+    {
+        return hour == time.hour && minute == time.minute
+                       && second == time.second
+                   ? true
+                   : false;
+    }
+auto Time::operator!=(Time const& time) const -> bool
+    {
+        return not (*this == time);
+    }
 auto Time::count_seconds() const -> uint64_t
 {
     return hour * 3600 + minute * 60 + second;
@@ -45,15 +94,15 @@ auto Time::to_string(TIME_OF_DAY time) -> std::string
 auto Time::check_time() -> void
 {
     if (second > 59) {
-        second = 0;
+        second -= 60;
         minute++;
     }
     if (minute > 59) {
-        minute = 0;
+        minute -= 60;
         hour++;
     }
     if (hour > 23) {
-        hour = 0;
+        hour -= 24;
     }
 }
 
