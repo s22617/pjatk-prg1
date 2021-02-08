@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <array>
 
 auto main() -> int
 {
@@ -34,10 +35,10 @@ auto main() -> int
 
     close(sock);
 
-    char buf[4096];
+    std::array<char, 4096> buf{0};
     while (true) {
-        memset(buf, 0, 4096);
-        int bytesReceived = read(client_sock, buf, 4096);
+        memset(buf.data(), 0, sizeof(buf));
+        int bytesReceived = read(client_sock, buf.data(), sizeof(buf));
 
         if (bytesReceived == -1) {
             perror("Error. Quitting\n");
@@ -48,9 +49,9 @@ auto main() -> int
             break;
         }
 
-        std::cout << std::string(buf, 0, bytesReceived) << std::endl;
+        std::cout << std::string(buf.data(), 0, bytesReceived) << std::endl;
 
-        write(client_sock, buf, bytesReceived + 1);
+        write(client_sock, buf.data(), bytesReceived + 1);
     }
 
     shutdown(sock, SHUT_RDWR);
