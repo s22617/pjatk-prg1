@@ -20,8 +20,7 @@ auto main() -> int
     auto const port = uint16_t{8080};
 
     sockaddr_in addr;
-    // prepare the address
-
+    // preparing the address
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_port   = htobe16(port);
@@ -35,8 +34,9 @@ auto main() -> int
 
     std::array<char, 4096> buf{0};
     auto input = std::string{};
-    
-    std::cout << "List of servers:\nes - Echo Server\nfs - File Server\nrns - Random Note Server\n";
+
+    std::cout << "List of servers:\nes - Echo Server\nfs - File Server\nrns - "
+                 "Random Note Server\n";
     while (true) {
         std::cout << "> ";
         getline(std::cin, input);
@@ -56,7 +56,7 @@ auto main() -> int
                       << "\n";
         }
     }
-
+    shutdown(sock, SHUT_RDWR);
     close(sock);
 
     return 0;

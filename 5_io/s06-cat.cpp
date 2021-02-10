@@ -1,10 +1,11 @@
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
-#include <array>
+#include <cstring>
 #include <iostream>
-#include <sstream>
 #include <string>
+#include <vector>
 
 auto main(int argc, char* argv[]) -> int
 {
@@ -21,7 +22,17 @@ auto main(int argc, char* argv[]) -> int
     }
 
     auto fd = open(fname.c_str(), O_RDWR, S_IRUSR | S_IWUSR);
-    std::array<char, 4096> buf{0};
+
+    struct stat info;
+    memset(&info, 0, sizeof(info));
+    auto const r = fstat(fd, &info);
+    if (r == -1) {
+        perror("stat(2)");
+    }
+
+
+    auto buf = std::vector<char>{};
+    buf.resize(info.st_size);
     auto const n = read(fd, buf.data(), buf.size());
     if (n == -1) {
         perror("?");
@@ -29,7 +40,7 @@ auto main(int argc, char* argv[]) -> int
     }
 
     std::cout << std::string{buf.data(), static_cast<size_t>(n)};
-
     close(fd);
+
     return 0;
 }

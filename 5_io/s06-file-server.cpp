@@ -32,11 +32,8 @@ auto main() -> int
 
 
     auto client_sock = accept(sock, nullptr, nullptr);
-
-    close(sock);
-
     std::array<char, 4096> buf{0};
-    auto message = std::string{};
+    auto message     = std::string{};
     auto file_output = std::string{};
     while (true) {
         memset(buf.data(), 0, sizeof(buf));
@@ -61,7 +58,7 @@ auto main() -> int
             if (n == -1) {
                 perror("read(2)");
             } else {
-                file_output      = message + "\n"
+                file_output = message + "\n"
                               + std::string{buf.data(), static_cast<size_t>(n)};
                 write(
                     client_sock, file_output.data(), file_output.length() - 1);
@@ -69,8 +66,10 @@ auto main() -> int
         }
     }
 
-    shutdown(sock, SHUT_RDWR);
+    shutdown(client_sock, SHUT_RDWR);
     close(client_sock);
+    shutdown(sock, SHUT_RDWR);
+    close(sock);
 
     return 0;
 }

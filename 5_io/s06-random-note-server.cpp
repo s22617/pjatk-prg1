@@ -30,11 +30,10 @@ auto main() -> int
     // server
     bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
     listen(sock, SOMAXCONN);
-    
-    std::vector<std::string> messages{};
-        
-    while (true) {
 
+    std::vector<std::string> messages{};
+
+    while (true) {
         auto client_sock = accept(sock, nullptr, nullptr);
         std::array<char, 4096> buf{0};
 
@@ -57,11 +56,12 @@ auto main() -> int
 
             write(client_sock, random.data(), random.length());
         }
+        shutdown(client_sock, SHUT_RDWR);
         close(client_sock);
     }
 
-    close(sock);
     shutdown(sock, SHUT_RDWR);
+    close(sock);
 
     return 0;
 }

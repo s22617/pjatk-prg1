@@ -55,7 +55,7 @@ auto main() -> int
                       << "\n";
         }
     }
-
+    shutdown(sock, SHUT_RDWR);
     close(sock);
 
     return 0;
